@@ -51,11 +51,13 @@ def evaluate_model(model_path, test_path):
     print(f"Average Precision Score: {average_precision_score(y_test, decision_scores):.4f}")
     
     # Log metrics to ClearML for visualization and comparison
-    logger.report_scalar("Metrics", "Precision", 0, precision_score(y_test, y_pred))
-    logger.report_scalar("Metrics", "Recall", 0, recall_score(y_test, y_pred))
-    logger.report_scalar("Metrics", "F1 Score", 0, f1_score(y_test, y_pred))
-    logger.report_scalar("Metrics", "AUC-ROC", 0, roc_auc_score(y_test, decision_scores))
-    logger.report_scalar("Metrics", "Average Precision", 0, average_precision_score(y_test, decision_scores))
+    # Log metrics to ClearML for visualization and comparison
+    logger.report_scalar("Metrics", "Precision", int(0), precision_score(y_test, y_pred))
+    logger.report_scalar("Metrics", "Recall", int(0), recall_score(y_test, y_pred))
+    logger.report_scalar("Metrics", "F1 Score", int(0), f1_score(y_test, y_pred))
+    logger.report_scalar("Metrics", "AUC-ROC", int(0), roc_auc_score(y_test, decision_scores))
+    logger.report_scalar("Metrics", "Average Precision", int(0), average_precision_score(y_test, decision_scores))
+
 
         
     # Create ROC curve
