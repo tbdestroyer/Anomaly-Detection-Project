@@ -52,11 +52,12 @@ def evaluate_model(model_path, test_path):
     
     # Log metrics to ClearML for visualization and comparison
     # Log metrics to ClearML for visualization and comparison
-    logger.report_scalar("Metrics", "Precision", int(0), precision_score(y_test, y_pred))
-    logger.report_scalar("Metrics", "Recall", int(0), recall_score(y_test, y_pred))
-    logger.report_scalar("Metrics", "F1 Score", int(0), f1_score(y_test, y_pred))
-    logger.report_scalar("Metrics", "AUC-ROC", int(0), roc_auc_score(y_test, decision_scores))
-    logger.report_scalar("Metrics", "Average Precision", int(0), average_precision_score(y_test, decision_scores))
+ # Log metrics to ClearML for visualization and comparison
+    logger.report_scalar(title="Metrics", series="Precision", value=precision_score(y_test, y_pred), iteration=0)
+    logger.report_scalar(title="Metrics", series="Recall", value=recall_score(y_test, y_pred), iteration=0)
+    logger.report_scalar(title="Metrics", series="F1 Score", value=f1_score(y_test, y_pred), iteration=0)
+    logger.report_scalar(title="Metrics", series="AUC-ROC", value=roc_auc_score(y_test, decision_scores), iteration=0)
+    logger.report_scalar(title="Metrics", series="Average Precision", value=average_precision_score(y_test, decision_scores), iteration=0)
 
 
         
