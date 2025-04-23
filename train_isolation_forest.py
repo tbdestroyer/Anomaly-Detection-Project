@@ -5,6 +5,17 @@ from sklearn.metrics import classification_report, confusion_matrix
 import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
+# Import ClearML's Task class to enable experiment tracking
+from clearml import Task
+
+# Initialize a ClearML Task to log this training run
+# This will automatically log code version, parameters, environment, and output files
+task = Task.init(
+    project_name="Anomaly Detection",             # Organizes this run under a project
+    task_name="Train Isolation Forest (Cloud)",   # A descriptive name for this specific run
+    task_type="training"                          # Marks it as a training task
+)
+
 
 def train_isolation_forest(train_path, test_path, contamination=0.01, random_state=42):
     # Load the training and testing datasets
