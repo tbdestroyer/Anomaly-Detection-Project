@@ -5,7 +5,9 @@ from sklearn.metrics import classification_report, confusion_matrix
 import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import os
+import psutil
+import time
 def train_isolation_forest(train_path, test_path, contamination=0.01, random_state=42, output_dir='outputs'):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -75,31 +77,7 @@ def train_isolation_forest(train_path, test_path, contamination=0.01, random_sta
 
     print(f"\nModel saved as '{model_path}'")
 
-    # Generate PDF Report
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font("Arial", 'B', 16)
-    pdf.cell(200, 10, txt="Isolation Forest Training Benchmark Report", ln=True, align='C')
-    pdf.ln(10)
-
-    pdf.set_font("Arial", size=12)
-    pdf.cell(0, 10, f"Training Time: {training_time:.2f} sec", ln=True)
-    pdf.cell(0, 10, f"CPU Usage Increase: {cpu_usage:.2f} %", ln=True)
-    pdf.cell(0, 10, f"Memory Usage Increase: {mem_usage:.2f} MB", ln=True)
-    pdf.cell(0, 10, f"Model Size: {model_size:.2f} MB", ln=True)
-    pdf.ln(10)
-
-    pdf.cell(0, 10, "Test Set Performance (F1-Score):", ln=True)
-    pdf.cell(0, 10, f" - F1-Score (Class 1): {test_report['1']['f1-score']:.4f}", ln=True)
-    pdf.cell(0, 10, f" - F1-Score (Class 0): {test_report['0']['f1-score']:.4f}", ln=True)
-
-    pdf.add_page()
-    pdf.image(cm_path, x=10, y=20, w=180)
-
-    pdf_path = os.path.join(output_dir, 'training_report.pdf')
-    pdf.output(pdf_path)
-
-    print(f"\nTraining report saved as '{pdf_path}'")
+    
 
 if __name__ == "__main__":
     train_isolation_forest('creditcard_train.csv', 'creditcard_test.csv')

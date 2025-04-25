@@ -13,7 +13,9 @@ import seaborn as sns
 
 # Import ClearML tools for logging and experiment tracking
 from clearml import Task, Logger
-
+from fpdf import FPDF
+import os
+import argparse
 # Initialize a ClearML Task for evaluation tracking
 task = Task.init(
     project_name="Anomaly Detection",               # Same project name to keep experiments grouped
@@ -28,9 +30,7 @@ logger = task.get_logger()
 def evaluate_model(model_path, test_path):
     # Load the trained model and test data
     print("Loading model and test data...")
-from fpdf import FPDF
-import os
-import argparse
+
 
 def log_computation_metrics(env_name, inference_time, throughput, cpu_usage, memory_usage):
     csv_path = 'benchmark_results.csv'
