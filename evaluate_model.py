@@ -9,6 +9,20 @@ from sklearn.metrics import (
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Import ClearML tools for logging and experiment tracking
+from clearml import Task, Logger
+
+# Initialize a ClearML Task for evaluation tracking
+task = Task.init(
+    project_name="Anomaly Detection",               # Same project name to keep experiments grouped
+    task_name="Evaluate Isolation Forest (Cloud)",  # A meaningful label for this evaluation run
+    task_type="testing"                             # Indicates this is a testing/evaluation run
+)
+
+# Create a logger instance for reporting custom metrics to the ClearML dashboard
+logger = task.get_logger()
+
+
 def evaluate_model(model_path, test_path):
     # Load the trained model and test data
     print("Loading model and test data...")
@@ -36,6 +50,17 @@ def evaluate_model(model_path, test_path):
     print(f"AUC-ROC: {roc_auc_score(y_test, decision_scores):.4f}")
     print(f"Average Precision Score: {average_precision_score(y_test, decision_scores):.4f}")
     
+    # Log metrics to ClearML for visualization and comparison
+    # Log metrics to ClearML for visualization and comparison
+ # Log metrics to ClearML for visualization and comparison
+    logger.report_scalar(title="Metrics", series="Precision", value=precision_score(y_test, y_pred), iteration=0)
+    logger.report_scalar(title="Metrics", series="Recall", value=recall_score(y_test, y_pred), iteration=0)
+    logger.report_scalar(title="Metrics", series="F1 Score", value=f1_score(y_test, y_pred), iteration=0)
+    logger.report_scalar(title="Metrics", series="AUC-ROC", value=roc_auc_score(y_test, decision_scores), iteration=0)
+    logger.report_scalar(title="Metrics", series="Average Precision", value=average_precision_score(y_test, decision_scores), iteration=0)
+
+
+        
     # Create ROC curve
     plt.figure(figsize=(12, 5))
     
