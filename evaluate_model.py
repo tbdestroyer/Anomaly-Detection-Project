@@ -129,8 +129,7 @@ def evaluate_model(model_path, test_path, output_dir='outputs', n_repeats=100):
 
     print(f"PDF report saved at {pdf_path}")
 
-    # Return computation metrics for logging
-    return elapsed_time, throughput, cpu_usage, mem_after - mem_before
+    
 
     
     # Calculate metrics
@@ -193,15 +192,16 @@ def evaluate_model(model_path, test_path, output_dir='outputs', n_repeats=100):
     performance_report.to_csv('model_performance_report.csv', index=False)
     print("\nPerformance report saved as 'model_performance_report.csv'")
     print("Evaluation curves saved as 'model_evaluation_curves.png'")
-    
-    return performance_report
+    # Return computation metrics for logging
+    return elapsed_time, throughput, cpu_usage, mem_after - mem_before, performance_report
+   
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--env', type=str, required=True, help='Environment name (e.g., Local, Docker (Cloud))')
     args = parser.parse_args()
 
-    elapsed_time, throughput, cpu_usage, memory_usage = evaluate_model('isolation_forest_model.joblib', 'creditcard_test.csv')
+    elapsed_time, throughput, cpu_usage, memory_usage, performance_report = evaluate_model('isolation_forest_model.joblib', 'creditcard_test.csv')
 
     log_computation_metrics(
         env_name=args.env,
