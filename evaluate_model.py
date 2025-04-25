@@ -38,7 +38,7 @@ def log_computation_metrics(env_name, inference_time, throughput, cpu_usage, mem
     print(f"✅ Computation metrics logged for {env_name} in '{csv_path}'")
 
 
-def evaluate_model(model_path, test_path, output_dir='outputs', n_repeats=1):
+def evaluate_model(model_path, test_path, output_dir='outputs', n_repeats=100):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
