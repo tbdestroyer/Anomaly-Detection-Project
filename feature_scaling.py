@@ -36,5 +36,5 @@ def scale_features(file_path):
 
 if __name__ == "__main__":
     # Use the same path as in the data analysis script
-    dataset_path = r"C:\Users\tanbu\Documents\GitHub\Anomaly-Detection-Project\creditcard.csv"
+    dataset_path = "creditcard.csv"
     scaled_data = scale_features(dataset_path) 
