@@ -7,3 +7,10 @@ seaborn==0.12.2
 clearml==1.18.0
 psutil==5.9.8
 fpdf==1.7.2
+fastapi
+uvicorn
+pandas
+numpy
+scikit-learn
+tensorflow
+joblib

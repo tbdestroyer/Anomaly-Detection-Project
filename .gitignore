@@ -3,6 +3,7 @@ creditcard.csv
 creditcard_scaled.csv
 creditcard_train.csv
 creditcard_test.csv
+*.csv
 
 # Ignore all outputs and reports
 /outputs/
