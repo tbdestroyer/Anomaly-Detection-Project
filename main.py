@@ -5,6 +5,8 @@ import pandas as pd
 import time
 
 from models.load_models import load_all_models
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 app = FastAPI(title="Anomaly Detection API", version="1.0")
 
@@ -30,7 +32,8 @@ class DataInput(BaseModel):
     data: list  # Expecting list of lists (rows of features)
 
 def predict_autoencoder(ae_model, ae_threshold, X):
-    reconstructed = ae_model.predict(X)
+    reconstructed = ae_model.predict(X, verbose=0)
+
     mse = np.mean(np.square(X - reconstructed), axis=1)
     return (mse > ae_threshold).astype(int)
 
