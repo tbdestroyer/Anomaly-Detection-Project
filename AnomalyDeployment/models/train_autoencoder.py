@@ -88,11 +88,8 @@ def train_autoencoder(train_path='creditcard_train.csv', output_dir='outputs'):
     plt.close()
 
     # Save model and threshold
-    # Save model in SavedModel format and threshold
-    autoencoder.export(os.path.join(output_dir, 'autoencoder_savedmodel'))
-
+    autoencoder.save(os.path.join(output_dir, 'autoencoder_model.h5'))
     joblib.dump(threshold, os.path.join(output_dir, 'autoencoder_threshold.joblib'))
-
 
     print(f"✅ AutoEncoder model, threshold, and metrics saved in '{output_dir}'")
 
