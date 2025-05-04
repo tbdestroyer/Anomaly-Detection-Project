@@ -1,3 +1,37 @@
+# Generated files
+*.png
+*.html
+*.csv
+*.log
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files
+ml_env_*/
+venv/
+env/
+.env
+.venv/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project specific
+outputs/
+logs/
+*.pkl
+*.h5
+*.model
+
 # Ignore dataset CSV files
 creditcard.csv
 creditcard_scaled.csv
@@ -16,20 +50,6 @@ creditcard_test.csv
 # Ignore any confusion matrices or generated images
 confusion_matrices.png
 benchmark_charts/
-
-# Python cache and virtual environment
-__pycache__/
-/*.pyc
-*.pyo
-*.pyd
-.env
-.venv
-
-# Jupyter Notebook checkpoints (if any)
-/.ipynb_checkpoints
-
-# OS-specific files
-.DS_Store
 
 # Avoid pushing large model files if needed
 *.joblib
