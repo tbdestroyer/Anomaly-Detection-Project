@@ -6,6 +6,15 @@ numpy==1.26.4
 pandas==2.2.3
 scikit-learn==1.6.1
 seaborn==0.13.2
-tensorflow==2.19.0
-tensorflow-io-gcs-filesystem==0.37.1
 uvicorn==0.34.2
+tensorflow==2.19.0
+locust==2.36.2
+requests==2.32.3
+python-socketio==5.13.0
+gevent==24.11.1
+Flask==3.1.0
+flask-cors==5.0.1
+psutil==7.0.0
+streamlit==1.45.0
+altair==5.5.0
+pyarrow==20.0.0

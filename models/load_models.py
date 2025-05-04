@@ -1,6 +1,7 @@
 import joblib
 import tensorflow as tf
 import os
+
 def load_all_models(output_dir='outputs'):
     models = {}
     # Load traditional ML models
@@ -10,11 +11,7 @@ def load_all_models(output_dir='outputs'):
     models['lof'] = joblib.load(f'{output_dir}/lof_model.joblib')
     
     # Load AutoEncoder and its threshold
-    models['autoencoder'] = tf.keras.models.load_model(
-    os.path.join(output_dir, 'autoencoder_model.h5'),
-    compile=False
-)
-
+    models['autoencoder'] = tf.saved_model.load(os.path.join(output_dir, 'autoencoder_savedmodel'))
     models['ae_threshold'] = joblib.load(os.path.join(output_dir, 'autoencoder_threshold.joblib'))
     
     print("✅ All models loaded successfully.")

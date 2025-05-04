@@ -80,4 +80,4 @@ def train_isolation_forest(train_path, test_path, contamination=0.01, random_sta
     
 
 if __name__ == "__main__":
-    train_isolation_forest('creditcard_train.csv', 'creditcard_test.csv')
+    train_isolation_forest('creditcard_train.csv', 'api_simulation_data.csv')

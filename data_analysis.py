@@ -8,7 +8,7 @@ import os
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
-def analyze_dataset(file_path):
+def analyze_dataset(file_path="creditcard.csv"):
     # Validate file path
     if not os.path.exists(file_path):
         print(f"Error: File '{file_path}' does not exist.")
@@ -80,6 +80,4 @@ def analyze_dataset(file_path):
     print("\nAnalysis complete!")
 
 if __name__ == "__main__":
-    # Use an absolute or dynamic path for the dataset
-    dataset_path = r"C:\Users\tanbu\Documents\GitHub\Anomaly-Detection-Project\creditcard.csv"
-    analyze_dataset(dataset_path)
+    analyze_dataset()

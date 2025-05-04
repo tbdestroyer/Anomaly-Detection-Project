@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import numpy as np
 import pandas as pd
 import time
+import tensorflow as tf
 
 from models.load_models import load_all_models
 import warnings
@@ -36,8 +37,12 @@ class DataInput(BaseModel):
     data: list  # Expecting list of lists (rows of features)
 
 def predict_autoencoder(ae_model, ae_threshold, X):
-    reconstructed = ae_model.predict(X, verbose=0)
-
+    # Convert input to tensor
+    input_tensor = tf.convert_to_tensor(X, dtype=tf.float32)
+    # Get the serving signature
+    serving_fn = ae_model.signatures['serving_default']
+    # Make prediction
+    reconstructed = serving_fn(input_tensor)['output_0'].numpy()
     mse = np.mean(np.square(X - reconstructed), axis=1)
     return (mse > ae_threshold).astype(int)
 

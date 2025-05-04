@@ -5,9 +5,15 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import tensorflow as tf
 
 def predict_autoencoder(ae_model, ae_threshold, X):
-    reconstructed = ae_model.predict(X)
+    # Convert input to tensor
+    input_tensor = tf.convert_to_tensor(X, dtype=tf.float32)
+    # Get the serving signature
+    serving_fn = ae_model.signatures['serving_default']
+    # Make prediction
+    reconstructed = serving_fn(input_tensor)['output_0'].numpy()
     mse = np.mean(np.square(X - reconstructed), axis=1)
     return (mse > ae_threshold).astype(int)
 

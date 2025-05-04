@@ -1,7 +1,7 @@
 import pandas as pd
 
-# Correct variable name and use raw string for the file path
-creditcard_csv_path = r"C:\Users\tanbu\Documents\GitHub\Anomaly-Detection-Project\creditcard.csv"
+# Use the correct path for the current directory
+creditcard_csv_path = "creditcard.csv"
 
 # Load the dataset using the variable
 data = pd.read_csv(creditcard_csv_path)
