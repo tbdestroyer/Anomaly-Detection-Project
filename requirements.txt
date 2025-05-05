@@ -1,0 +1,14 @@
+fastapi==0.115.12
+joblib==1.4.2
+matplotlib==3.10.1
+matplotlib-inline==0.1.7
+numpy==1.26.4
+pandas==2.2.3
+scikit-learn==1.6.1
+seaborn==0.13.2
+tensorflow==2.16.2
+tensorflow-io-gcs-filesystem==0.37.1
+uvicorn==0.34.2
+streamlit>=1.0
+locust>=2.0
+requests>=2.0

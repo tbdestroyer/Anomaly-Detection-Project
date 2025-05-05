@@ -1,0 +1,46 @@
+# Ignore dataset CSV files
+creditcard.csv
+creditcard_scaled.csv
+creditcard_train.csv
+creditcard_test.csv
+*.csv
+
+# Ignore all outputs and reports
+/outputs/
+/benchmark_results.csv
+/model_evaluation_curves.png
+/benchmark.html
+/training_report.pdf
+/model_performance_report.pdf
+
+# Ignore any confusion matrices or generated images
+confusion_matrices.png
+benchmark_charts/
+
+# Python cache and virtual environment
+__pycache__/
+/*.pyc
+*.pyo
+*.pyd
+.env
+.venv
+
+# Jupyter Notebook checkpoints (if any)
+/.ipynb_checkpoints
+
+# OS-specific files
+.DS_Store
+
+# Avoid pushing large model files if needed
+*.joblib
+AnomalyDeployment/
+New Folder With Items/
+outputs copy/
+__pycache__/
+
+# ignore artifacts and virtualenv
+outputs/
+venv/
+*.h5
+*.joblib
+*.png
