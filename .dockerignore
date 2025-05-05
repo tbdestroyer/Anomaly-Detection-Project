@@ -34,12 +34,32 @@ ENV/
 *.swp
 *.swo
 
-# Output files
-*.png
+# Logs and outputs
+logs/
+outputs/
+*.log
 *.csv
-!creditcard_test.csv
-model_performance_report.csv
-model_evaluation_curves.png
+*.png
+*.html
 
-# Other
-.DS_Store 
+# Windows specific
+*.bat
+*.exe
+*.dll
+*.msi
+*.msm
+*.msp
+
+# Mac specific
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Project specific
+creditcard.csv
+creditcard_train.csv
+creditcard_scaled.csv
+api_simulation_data.csv
+prediction_results_log.csv
+benchmark_results.csv
+model_performance_report.csv 
