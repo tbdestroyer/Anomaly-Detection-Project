@@ -12,3 +12,5 @@ uvicorn==0.34.2
 streamlit>=1.0
 locust>=2.0
 requests>=2.0
+plotly
+watchdog  # Optional, but improves Streamlit dev performance
