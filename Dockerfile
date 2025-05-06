@@ -12,7 +12,18 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Create necessary directories
-RUN mkdir -p logs outputs outputs/drift_plots models
+RUN mkdir -p \
+    logs \
+    outputs \
+    outputs/drift \
+    outputs/correlations \
+    outputs/distributions \
+    outputs/presentation \
+    models \
+    models/versions \
+    models/backups \
+    deployments \
+    anomaly_detection/monitoring
 
 # Copy all necessary files
 COPY . .
@@ -29,24 +40,15 @@ set -e\n\
 \n\
 echo "Starting Anomaly Detection Project..."\n\
 \n\
-# Step 1: Data Preparation\n\
-echo "Preparing data..."\n\
+# Step 1: Data Preparation and Validation\n\
+echo "Preparing and validating data..."\n\
 if [ ! -f "creditcard.csv" ]; then\n\
     echo "Error: creditcard.csv not found. Please make sure the data file is present."\n\
     exit 1\n\
 fi\n\
 \n\
-echo "Preprocessing credit card data..."\n\
-python creditcard_preprocess.py || { echo "Error preprocessing data"; exit 1; }\n\
-\n\
-echo "Scaling features..."\n\
-python feature_scaling.py || { echo "Error scaling features"; exit 1; }\n\
-\n\
-echo "Splitting data into training and API sets..."\n\
-python data_split.py || { echo "Error splitting data"; exit 1; }\n\
-\n\
-echo "Analyzing data and generating visualizations..."\n\
-python data_analysis.py || { echo "Error in data analysis"; exit 1; }\n\
+echo "Running data validation..."\n\
+python -c "from anomaly_detection.monitoring.data_monitor import DataMonitor; monitor = DataMonitor(\"creditcard.csv\"); monitor.validate_data(); monitor.visualize_validation_results()" || { echo "Error in data validation"; exit 1; }\n\
 \n\
 # Step 2: Train individual models\n\
 echo "Training individual models..."\n\
@@ -66,35 +68,26 @@ python models/train_lof.py || { echo "Error training Local Outlier Factor"; exit
 echo "Training Autoencoder..."\n\
 python models/train_autoencoder.py || { echo "Error training Autoencoder"; exit 1; }\n\
 \n\
-# Step 3: Evaluate models and generate reports\n\
-echo "Evaluating models and generating reports..."\n\
-python evaluate_model.py || { echo "Error evaluating models"; exit 1; }\n\
-\n\
-echo "Generating benchmark report..."\n\
-python generate_benchmark_report.py || { echo "Error generating benchmark report"; exit 1; }\n\
-\n\
-echo "Generating full report..."\n\
-python generate_full_report.py || { echo "Error generating full report"; exit 1; }\n\
-\n\
-# Step 4: Train ensemble models\n\
+# Step 3: Train ensemble models\n\
 echo "Training ensemble models..."\n\
 \n\
 echo "Training Light Ensemble..."\n\
 python models/ensemble_light.py || { echo "Error training Light Ensemble"; exit 1; }\n\
 \n\
-echo "Training Medium Ensemble..."\n\
-python models/ensemble_medium.py || { echo "Error training Medium Ensemble"; exit 1; }\n\
-\n\
 echo "Training Full Ensemble..."\n\
 python models/ensemble_full.py || { echo "Error training Full Ensemble"; exit 1; }\n\
 \n\
-# Step 5: Run drift detection\n\
-echo "Running drift detection..."\n\
-python drift_detection.py || { echo "Warning: Drift detection completed with issues"; }\n\
+# Step 4: Set up model versioning and deployment\n\
+echo "Setting up model versioning and deployment..."\n\
+python -c "from anomaly_detection.versioning.model_versioning import ModelVersioning; versioning = ModelVersioning(); versioning.create_backup(); versioning.visualize_backup_history()" || { echo "Error in model versioning setup"; exit 1; }\n\
+\n\
+# Step 5: Start monitoring services\n\
+echo "Starting monitoring services..."\n\
+python -c "from anomaly_detection.monitoring.resource_monitor import ResourceMonitor; monitor = ResourceMonitor(); monitor.start_monitoring()" &\n\
 \n\
 # Step 6: Start FastAPI server\n\
 echo "Starting FastAPI server..."\n\
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-level debug &\n\
+uvicorn anomaly_detection.deployment.deploy:app --host 0.0.0.0 --port 8000 --reload --log-level debug &\n\
 \n\
 # Wait for FastAPI server to start and models to load\n\
 echo "Waiting for models to load (this may take a few minutes)..."\n\
@@ -102,7 +95,7 @@ sleep 30\n\
 \n\
 # Check if FastAPI is responding and models are loaded\n\
 echo "Checking if FastAPI server is ready..."\n\
-until curl -s http://localhost:8000/ > /dev/null; do\n\
+until curl -s http://localhost:8000/health > /dev/null; do\n\
     echo "Waiting for FastAPI server to start..."\n\
     sleep 5\n\
 done\n\
@@ -118,7 +111,7 @@ echo "FastAPI server is ready and working correctly!"\n\
 # Step 7: Start Locust\n\
 echo "Starting Locust load testing..."\n\
 echo "Verifying API is ready for Locust..."\n\
-curl -s http://localhost:8000/ > /dev/null || { echo "Error: API is not ready for Locust testing"; exit 1; }\n\
+curl -s http://localhost:8000/health > /dev/null || { echo "Error: API is not ready for Locust testing"; exit 1; }\n\
 \n\
 echo "Starting Locust with web UI..."\n\
 locust -f locustfile.py --host http://localhost:8000 --web-host 0.0.0.0 &\n\
@@ -132,7 +125,17 @@ curl -s http://localhost:8089/ > /dev/null || echo "Warning: Locust web interfac
 \n\
 # Step 8: Start Streamlit dashboard\n\
 echo "Starting Streamlit dashboard..."\n\
-streamlit run evaluation_dashboard.py --server.port 8501 --server.address 0.0.0.0\n\
+streamlit run evaluation_dashboard.py --server.port 8501 --server.address 0.0.0.0 --server.headless true --server.enableCORS false --server.enableXsrfProtection false &\n\
+\n\
+# Wait for Streamlit to start\n\
+sleep 5\n\
+\n\
+# Verify Streamlit is running\n\
+echo "Checking if Streamlit dashboard is running..."\n\
+curl -s http://localhost:8501/ > /dev/null || echo "Warning: Streamlit dashboard is not accessible. Continuing anyway..."\n\
+\n\
+# Keep the container running\n\
+tail -f /dev/null\n\
 ' > /app/start.sh && chmod +x /app/start.sh
 
 # Set the startup script as the entrypoint
