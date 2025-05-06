@@ -44,3 +44,5 @@ venv/
 *.h5
 *.joblib
 *.png
+# OS junk
+.DS_Store

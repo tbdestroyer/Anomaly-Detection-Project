@@ -11,7 +11,8 @@ def predict_autoencoder(ae_model, ae_threshold, X):
     reconstructed = ae_model.predict(X)
     mse = np.mean(np.square(X - reconstructed), axis=1)
     return (mse > ae_threshold).astype(int)
-def ensemble_light(input_path='api_simulation_data.csv', output_dir='outputs'):
+                                
+def ensemble_light(input_path='data/api_simulation_data.csv', output_dir='outputs'):
     print("🔹 Loading models...")
     models = load_all_models()
 
